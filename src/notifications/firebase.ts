@@ -1,5 +1,9 @@
-import { initializeApp } from "firebase/app"
-import { getMessaging, getToken } from "firebase/messaging"
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken } from "firebase/messaging";
+
+
+
+
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,13 +20,14 @@ console.log("✅ Firebase Config:", firebaseConfig) // <— Add this temporarily
 const app = initializeApp(firebaseConfig)
 export const messaging = getMessaging(app)
 
-export const generateToken = async () => {
+export const generateToken = async (registration: ServiceWorkerRegistration | undefined) => {
     const permission = await Notification.requestPermission()
 
     if (permission === "granted") {
         try {
             const token = await getToken(messaging, {
                 vapidKey: "BEgcq9qqrEZZX_VEfZW7Od4spcwkUR8FddFAkgDR2U3laZ02YzG0e7-TdekymTVCxogxQJKByGyMYtesNTR1EgI",
+                serviceWorkerRegistration: registration,
             })
             console.log("🔥 FCM Token:", token)
         } catch (err) {
