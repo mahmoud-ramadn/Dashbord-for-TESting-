@@ -1,13 +1,23 @@
-import { lazy } from "react"
+import { onMessage } from "firebase/messaging"
+import { toast } from "sonner"
+
+import { lazy, useEffect } from "react"
 import { Outlet } from "react-router"
 
 import { SidebarProvider } from "@/components/ui/sidebar"
 
 import DashboardSidebar from "@/components/dashboard-sidebar"
+import { generateToken, messaging } from "@/notifications/firebase"
 
 const Header = lazy(() => import("@/components/header"))
 
 export default function DashboardLayout() {
+    useEffect(() => {
+        generateToken()
+        onMessage(messaging, (payload) => {
+            toast.success(`اشعار جديد: ${payload.notification?.title} ${payload.notification?.body}`)
+        })
+    }, [])
     return (
         <SidebarProvider>
             <DashboardSidebar />

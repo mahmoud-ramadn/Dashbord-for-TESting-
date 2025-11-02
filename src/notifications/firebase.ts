@@ -1,9 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getMessaging, getToken } from "firebase/messaging";
-
-
-
-
+import { initializeApp } from "firebase/app"
+import { getMessaging, getToken } from "firebase/messaging"
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -12,31 +8,20 @@ const firebaseConfig = {
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 }
-
 
 const app = initializeApp(firebaseConfig)
-const messaging = getMessaging(app)
+export const messaging = getMessaging(app)
 
-const generateToken = async (sw?: ServiceWorkerRegistration) => {
-    try {
-        const permission = await Notification.requestPermission()
-        if (permission === "granted") {
-            const currentToken = await getToken(messaging, {
-                vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
-                serviceWorkerRegistration: sw,
-            })
-            if (currentToken) {
-                console.log("FCM Token:", currentToken)
-            } else {
-                console.warn("No registration token available.")
-            }
-        } else {
-            console.warn("Notification permission denied")
-        }
-    } catch (err) {
-        console.error("An error occurred while retrieving token. ", err)
+export const generateToken = async () => {
+    const permission = await Notification.requestPermission()
+
+    if (permission === "granted") {
+    const token = await getToken(messaging, {
+        vapidKey: "BM7tUrv64vNIX3sY0M-eaLDSL7NF6EtcPlX3RviqunH3SUiZwBh-PQqNZXzQeFIAE0DeLWKehg86nZHPK6W1Eg0",
+        })
+        console.log(token);
+        
     }
 }
-
-export { generateToken }
