@@ -37,7 +37,7 @@ const statsData: StatsCardProps[] = [
 
 export default function Index() {
     useEffect(() => {
-        generateToken()
+        generateToken(undefined) // Generate token without service worker registration
         onMessage(messaging, (payload) => {
             toast.success(`اشعار جديد: ${payload.notification?.title} - ${payload.notification?.body}`)
         })

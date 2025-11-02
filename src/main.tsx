@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router"
 
 import "@/assets/css/index.css"
 import { router } from "@/routes"
+
 import { generateToken } from "./notifications/firebase"
 
 // adjust path if needed
