@@ -1,22 +1,6 @@
-import { onMessage } from "firebase/messaging";
-import { ActivityIcon, PackageIcon, UsersIcon } from "lucide-react";
-import { toast } from "sonner";
+import { ActivityIcon, PackageIcon, UsersIcon } from "lucide-react"
 
-
-
-import { useEffect } from "react";
-
-
-
-import StatsCard, { type StatsCardProps } from "@/components/ui/statsCard";
-
-
-
-import { generateToken, messaging } from "@/notifications/firebase";
-
-
-
-
+import StatsCard, { type StatsCardProps } from "@/components/ui/statsCard"
 
 const statsData: StatsCardProps[] = [
     {
@@ -46,25 +30,6 @@ const statsData: StatsCardProps[] = [
 ]
 
 export default function Index() {
-    useEffect(() => {
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker
-                .register("/firebase-messaging-sw.js")
-                .then((registration) => {
-                    generateToken(registration)
-                })
-                .catch((err) => {
-                    console.error("Service Worker registration failed:", err)
-                })
-        }
-
-        const unsubscribe = onMessage(messaging, (payload) => {
-            toast.success(`📩 إشعار جديد: ${payload.notification?.title} - ${payload.notification?.body}`)
-        })
-
-        return () => unsubscribe()
-    }, [])
-
     return (
         <div className="min-h-screen p-4 sm:p-6 lg:p-8">
             <div className="max-w-7xl mx-auto space-y-8">
