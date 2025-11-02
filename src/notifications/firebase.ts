@@ -8,10 +8,8 @@ const firebaseConfig = {
     storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
     messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
     appId: import.meta.env.VITE_FIREBASE_APP_ID,
-    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 }
 
-console.log("✅ Firebase Config:", firebaseConfig) // <— Add this temporarily!
 
 const app = initializeApp(firebaseConfig)
 const messaging = getMessaging(app)
@@ -19,7 +17,7 @@ const messaging = getMessaging(app)
 const generateToken = async (sw?: ServiceWorkerRegistration) => {
     try {
         const currentToken = await getToken(messaging, {
-            vapidKey: "BEgcq9qqrEZZX_VEfZW7Od4spcwkUR8FddFAkgDR2U3laZ02YzG0e7-TdekymTVCxogxQJKByGyMYtesNTR1EgI",
+            vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY,
             serviceWorkerRegistration: sw,
         })
         if (currentToken) {
