@@ -1,9 +1,5 @@
-import { initializeApp } from "firebase/app";
-import { getMessaging, getToken } from "firebase/messaging";
-
-
-
-
+import { initializeApp } from "firebase/app"
+import { getMessaging, getToken } from "firebase/messaging"
 
 const firebaseConfig = {
     apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -18,22 +14,23 @@ const firebaseConfig = {
 console.log("✅ Firebase Config:", firebaseConfig) // <— Add this temporarily!
 
 const app = initializeApp(firebaseConfig)
-export const messaging = getMessaging(app)
+const messaging = getMessaging(app)
 
-export const generateToken = async (registration: ServiceWorkerRegistration | undefined) => {
-    const permission = await Notification.requestPermission()
-
-    if (permission === "granted") {
-        try {
-            const token = await getToken(messaging, {
-                vapidKey: "BEgcq9qqrEZZX_VEfZW7Od4spcwkUR8FddFAkgDR2U3laZ02YzG0e7-TdekymTVCxogxQJKByGyMYtesNTR1EgI",
-                serviceWorkerRegistration: registration,
-            })
-            console.log("🔥 FCM Token:", token)
-        } catch (err) {
-            console.error("❌ Error getting token:", err)
+const generateToken = async (sw?: ServiceWorkerRegistration) => {
+    try {
+        const currentToken = await getToken(messaging, {
+            vapidKey: "BEgcq9qqrEZZX_VEfZW7Od4spcwkUR8FddFAkgDR2U3laZ02YzG0e7-TdekymTVCxogxQJKByGyMYtesNTR1EgI",
+            serviceWorkerRegistration: sw,
+        })
+        if (currentToken) {
+            console.log("FCM Token:", currentToken)
+            // Optionally send token to your server
+        } else {
+            console.warn("No registration token available.")
         }
-    } else {
-        console.warn("❌ Notification permission not granted")
+    } catch (err) {
+        console.error("An error occurred while retrieving token. ", err)
     }
 }
+
+export { messaging, generateToken }
