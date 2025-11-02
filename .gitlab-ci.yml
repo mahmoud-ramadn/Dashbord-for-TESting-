@@ -1,0 +1,29 @@
+image: node:20
+
+stages:
+    - build
+    - deploy
+
+build-job:
+    stage: build
+    script:
+        - npm i -g pnpm
+        - pnpm i
+        - pnpm run  build
+
+deploy_job:
+    image: ubuntu:latest
+    stage: deploy
+    only:
+        - main
+    before_script:
+        - apt-get -yq update
+        - apt-get -yqq install ssh
+        - install -m 600 -D /dev/null ~/.ssh/id_rsa
+        - echo "$SSH_KEY"> ~/.ssh/id_rsa
+        - ssh-keyscan -H $SSH_HOST > ~/.ssh/known_hosts
+    script:
+        - ssh $SSH_USER@$SSH_HOST " cd /var/www/gawb/gawb-board && git stash && n 20 && git pull origin main && pnpm i  && pnpm run build && pm2 restart gawb-board && exit"
+
+    after_script:
+        - rm -rf ~/.ssh
