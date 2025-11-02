@@ -15,7 +15,7 @@ export default function DashboardLayout() {
     useEffect(() => {
         generateToken()
         onMessage(messaging, (payload) => {
-            toast.success(`اشعار جديد: ${payload.notification?.title} ${payload.notification?.body}`)
+            toast.success(`ا شعار جديد: ${payload.notification?.title} ****** ${payload.notification?.body}`)
         })
     }, [])
     return (
