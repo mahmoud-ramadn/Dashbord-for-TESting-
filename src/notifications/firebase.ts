@@ -11,6 +11,8 @@ const firebaseConfig = {
     measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 }
 
+console.log("✅ Firebase Config:", firebaseConfig) // <— Add this temporarily!
+
 const app = initializeApp(firebaseConfig)
 export const messaging = getMessaging(app)
 
@@ -18,9 +20,15 @@ export const generateToken = async () => {
     const permission = await Notification.requestPermission()
 
     if (permission === "granted") {
-        const token = await getToken(messaging, {
-            vapidKey: "BEgcq9qqrEZZX_VEfZW7Od4spcwkUR8FddFAkgDR2U3laZ02YzG0e7-TdekymTVCxogxQJKByGyMYtesNTR1EgI",
-        })
-        console.log(token)
+        try {
+            const token = await getToken(messaging, {
+                vapidKey: "BEgcq9qqrEZZX_VEfZW7Od4spcwkUR8FddFAkgDR2U3laZ02YzG0e7-TdekymTVCxogxQJKByGyMYtesNTR1EgI",
+            })
+            console.log("🔥 FCM Token:", token)
+        } catch (err) {
+            console.error("❌ Error getting token:", err)
+        }
+    } else {
+        console.warn("❌ Notification permission not granted")
     }
 }
