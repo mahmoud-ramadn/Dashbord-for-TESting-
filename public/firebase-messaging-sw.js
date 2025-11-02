@@ -9,7 +9,7 @@ firebase.initializeApp({
     projectId: "pushnotifications-565d2",
     storageBucket: "pushnotifications-565d2.firebasestorage.app",
     messagingSenderId: "779885201511",
-    appId: "1:779885201511",
+    appId: "1:779885201511:web:ea9459e59da82de0f4acc2",
     measurementId: "G-CPCBYBE4KY",
 })
 
